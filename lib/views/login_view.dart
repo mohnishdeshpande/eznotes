@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mynotes/constants/routes.dart';
 
 import 'package:mynotes/utils/show_error_dialog.dart';
 
@@ -91,7 +92,7 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                'registerRoute',
+                registerRoute,
                 (route) => false,
               );
             },

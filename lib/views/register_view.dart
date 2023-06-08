@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/utils/show_error_dialog.dart';
 import 'dart:developer' as dev show log;
 
 class RegisterView extends StatefulWidget {
@@ -67,26 +69,35 @@ class _RegisterViewState extends State<RegisterView> {
               final password = _password.text;
               try {
                 // registering with the user credentials
-                final userCred = await FirebaseAuth.instance
+                await FirebaseAuth.instance
                     .createUserWithEmailAndPassword(email: email, password: password);
 
-                // print the response from firebase
-                dev.log(userCred.toString());
+                // send verification email
+                FirebaseAuth.instance.currentUser?.sendEmailVerification();
+
+                // continue to verify email
+                if (context.mounted) {
+                  Navigator.of(context).pushNamed(verifyEmailRoute);
+                }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'invalid-email') {
-                  dev.log('Invalid email');
+                  await showErrorDialog(context, 'Invalid Email');
                 } else if (e.code == 'email-already-in-use') {
-                  dev.log('Email already in user');
+                  await showErrorDialog(context, 'Email already in use');
                 } else if (e.code == 'weak-password') {
-                  dev.log('Weak password');
+                  await showErrorDialog(context, 'Weak Password');
+                } else {
+                  await showErrorDialog(context, e.code.toString());
                 }
+              } catch (e) {
+                await showErrorDialog(context, e.runtimeType.toString());
               }
             },
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                'loginRoute',
+                loginRoute,
                 (route) => false,
               );
             },
