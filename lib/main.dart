@@ -8,6 +8,7 @@ import 'views/login_view.dart';
 void main() {
   // LEARN MORE ABOUT THIS
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MaterialApp(
     title: 'Flutter Demo',
     theme: ThemeData(
@@ -27,7 +28,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Home'),
-          backgroundColor: Colors.blue,
+          // backgroundColor: Colors.blue,
         ),
         body: FutureBuilder(
           // initialise firebase before building/redering the column
@@ -38,16 +39,43 @@ class HomePage extends StatelessWidget {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 final user = FirebaseAuth.instance.currentUser;
+                // if email verified
                 if (user?.emailVerified ?? false) {
-                  print('Email verfied');
+                  return const Text('Email verfied');
                 } else {
-                  print('Email verification required');
+                  return const VerifyEmailView();
                 }
-                return const Text('Done');
               default:
                 return const Text('Loading');
             }
           },
         ));
+  }
+}
+
+class VerifyEmailView extends StatefulWidget {
+  const VerifyEmailView({super.key});
+
+  @override
+  State<VerifyEmailView> createState() => _VerifyEmailViewState();
+}
+
+class _VerifyEmailViewState extends State<VerifyEmailView> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Text('Please verify your email'),
+        TextButton(
+          onPressed: () async {
+            // get current user
+            final user = FirebaseAuth.instance.currentUser;
+            // send verification email
+            await user?.sendEmailVerification();
+          },
+          child: const Text('Send Email'),
+        )
+      ],
+    );
   }
 }
