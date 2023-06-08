@@ -86,7 +86,7 @@ class _RegisterViewState extends State<RegisterView> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                '/login/',
+                'loginRoute',
                 (route) => false,
               );
             },

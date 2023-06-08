@@ -70,7 +70,7 @@ class _LoginViewState extends State<LoginView> {
                 // navigate to the Main UI
                 if (context.mounted) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/notes/',
+                    'notesRoute',
                     (route) => false,
                   );
                 }
@@ -86,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                '/register/',
+                'registerRoute',
                 (route) => false,
               );
             },
