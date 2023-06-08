@@ -6,7 +6,6 @@ import 'package:mynotes/firebase_options.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/register_view.dart';
 import 'package:mynotes/views/verify_email_view.dart';
-import 'dart:developer' as dev show log;
 
 void main() {
   // LEARN MORE ABOUT THIS
@@ -41,14 +40,19 @@ class HomePage extends StatelessWidget {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
+            // get current user
             final user = FirebaseAuth.instance.currentUser;
+            // if user is logged in
             if (user != null) {
               if (user.emailVerified) {
+                // if email is verified load Notes
                 return const NotesView();
               } else {
+                // load verif email
                 return const VerifyEmailView();
               }
             } else {
+              // load login if not logged in
               return const LoginView();
             }
           default:
@@ -131,7 +135,7 @@ Future<bool> showLogOutDialog(BuildContext context) {
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
             },
             child: const Text('Log out'),
           ),
