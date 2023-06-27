@@ -3,7 +3,7 @@ import 'package:mynotes/enums/menu_action.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/crud/notes_service.dart';
 
-import '../constants/routes.dart';
+import '../../constants/routes.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -37,10 +37,17 @@ class _NotesViewState extends State<NotesView> {
     final authService = AuthService.firebase();
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Main UI'),
+          title: const Text('Your Notes'),
           backgroundColor: Colors.blue,
           // define the 3 dot menu
           actions: [
+            IconButton(
+              onPressed: () {
+                // go to new note view
+                Navigator.of(context).pushNamed(newNoteRoute);
+              },
+              icon: const Icon(Icons.add),
+            ),
             // action button, that takes MenuAction as input
             PopupMenuButton<MenuAction>(
               // responsible for displaying the all actions to the user
@@ -63,7 +70,7 @@ class _NotesViewState extends State<NotesView> {
                       await authService.logOut();
                       if (context.mounted) {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                          'loginRoute',
+                          loginRoute,
                           (_) => false,
                         );
                       }
