@@ -6,13 +6,21 @@ import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class NoteService {
+class NotesService {
   Database? _db;
 
   List<DatabaseNote> _notes = [];
 
+  // making NotesService a singleton
+  static final NotesService _shared = NotesService._instance();
+  NotesService._instance();
+  factory NotesService() => _shared;
+
   // stream of notes
   final _notesStreamController = StreamController<List<DatabaseNote>>.broadcast();
+
+  // getter for all stream notes
+  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
   // pre-loading notes into the application
   Future<void> _cacheNotes() async {
@@ -47,6 +55,7 @@ class NoteService {
   }
 
   Future<DatabaseUser> getUser({required String email}) async {
+    await _ensureDbOpen();
     final db = _getDB();
     final results = await db.query(
       userTable,
@@ -63,6 +72,7 @@ class NoteService {
   }
 
   Future<DatabaseUser> createUser({required String email}) async {
+    await _ensureDbOpen();
     final db = _getDB();
     final results = await db.query(
       userTable,
@@ -84,6 +94,7 @@ class NoteService {
   }
 
   Future<void> deleteUser({required String email}) async {
+    await _ensureDbOpen();
     final db = _getDB();
     // sqflite syntax
     final deletedCount = await db.delete(
@@ -94,6 +105,14 @@ class NoteService {
 
     if (deletedCount != 1) {
       throw CouldNotDeleteUser();
+    }
+  }
+
+  Future<void> _ensureDbOpen() async {
+    try {
+      await open();
+    } on DatabaseAlreadyOpenException {
+      // empty
     }
   }
 
@@ -130,6 +149,7 @@ class NoteService {
   }
 
   Future<DatabaseNote> createNote({required DatabaseUser owner}) async {
+    await _ensureDbOpen();
     final db = _getDB();
     // ensure owner exists in DB
     final user = await getUser(email: owner.email);
@@ -158,6 +178,7 @@ class NoteService {
   }
 
   Future<void> deleteNote({required int noteId}) async {
+    await _ensureDbOpen();
     final db = _getDB();
     final deletedCount = await db.delete(
       noteTable,
@@ -174,6 +195,7 @@ class NoteService {
   }
 
   Future<int> deleteAllNotes({required DatabaseUser owner}) async {
+    await _ensureDbOpen();
     final db = _getDB();
     final deletionsCount = await db.delete(noteTable);
     // empty the notes array
@@ -183,6 +205,7 @@ class NoteService {
   }
 
   Future<DatabaseNote> getNote({required int noteId}) async {
+    await _ensureDbOpen();
     final db = _getDB();
     final results = await db.query(
       noteTable,
@@ -205,6 +228,7 @@ class NoteService {
   }
 
   Future<Iterable<DatabaseNote>> getAllNotes() async {
+    await _ensureDbOpen();
     final db = _getDB();
     // get all rows
     final results = await db.query(noteTable);
@@ -218,6 +242,7 @@ class NoteService {
     required int noteId,
     required String text,
   }) async {
+    await _ensureDbOpen();
     final db = _getDB();
     // just to ensure note with given id exists
     await getNote(noteId: noteId);
