@@ -25,16 +25,18 @@ class _NotesViewState extends State<NotesView> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    // close DB
-    _notesService.close();
-    super.dispose();
+  void __clearNotes(AuthService authService) async {
+    final owner = await _notesService.getUser(
+      email: authService.currentUser!.email!,
+    );
+    final delCount = await _notesService.deleteAllNotes(owner: owner);
+    print('$delCount notes deleted');
   }
 
   @override
   Widget build(BuildContext context) {
     final authService = AuthService.firebase();
+    // __clearNotes(authService);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Your Notes'),
@@ -92,7 +94,26 @@ class _NotesViewState extends State<NotesView> {
                       // follow-through case - two case having the same logic
                       case ConnectionState.waiting:
                       case ConnectionState.active:
-                        return const Text('Waiting for all notes');
+                        if (snapshot.hasData) {
+                          final allNotes = snapshot.data as List<DatabaseNote>;
+                          print(allNotes);
+                          return ListView.builder(
+                            itemCount: allNotes.length,
+                            itemBuilder: (context, index) {
+                              final note = allNotes[index];
+                              return ListTile(
+                                title: Text(
+                                  note.text,
+                                  maxLines: 1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
                       default:
                         return const CircularProgressIndicator();
                     }
