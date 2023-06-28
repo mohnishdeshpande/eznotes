@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/enums/menu_action.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/crud/notes_service.dart';
+import 'package:mynotes/utils/dialogs/logout_dialog.dart';
+import 'package:mynotes/views/notes/notes_list_view.dart';
 
 import '../../constants/routes.dart';
 
@@ -23,14 +25,6 @@ class _NotesViewState extends State<NotesView> {
     _notesService = NotesService();
     _notesService.open();
     super.initState();
-  }
-
-  void __clearNotes(AuthService authService) async {
-    final owner = await _notesService.getUser(
-      email: authService.currentUser!.email!,
-    );
-    final delCount = await _notesService.deleteAllNotes(owner: owner);
-    print('$delCount notes deleted');
   }
 
   @override
@@ -95,20 +89,11 @@ class _NotesViewState extends State<NotesView> {
                       case ConnectionState.waiting:
                       case ConnectionState.active:
                         if (snapshot.hasData) {
-                          final allNotes = snapshot.data as List<DatabaseNote>;
-                          print(allNotes);
-                          return ListView.builder(
-                            itemCount: allNotes.length,
-                            itemBuilder: (context, index) {
-                              final note = allNotes[index];
-                              return ListTile(
-                                title: Text(
-                                  note.text,
-                                  maxLines: 1,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              );
+                          final notes = snapshot.data as List<DatabaseNote>;
+                          return NotesListView(
+                            notes: notes,
+                            onDeleteNote: (note) async {
+                              await _notesService.deleteNote(noteId: note.id);
                             },
                           );
                         } else {
@@ -125,31 +110,4 @@ class _NotesViewState extends State<NotesView> {
           },
         ));
   }
-}
-
-// method for log out dialog box
-Future<bool> showLogOutDialog(BuildContext context) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Log out'),
-        content: const Text('Are you sure you want to log out?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
-            },
-            child: const Text('Log out'),
-          ),
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
 }
