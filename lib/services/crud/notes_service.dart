@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mynotes/extensions/filter.dart';
 import 'package:mynotes/services/crud/crud_exceptions.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
@@ -10,6 +11,8 @@ class NotesService {
   Database? _db;
 
   List<DatabaseNote> _notes = [];
+
+  DatabaseUser? _user;
 
   // making NotesService a singleton
   static final NotesService _shared = NotesService._instance();
@@ -28,7 +31,14 @@ class NotesService {
   }
 
   // getter for all stream notes
-  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
+  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream.filter((note) {
+        final user = _user;
+        if (user != null) {
+          return note.userId == user.id;
+        } else {
+          throw UserMustBeSetBeforeRead();
+        }
+      });
 
   // pre-loading notes into the application
   Future<void> _cacheNotes() async {
@@ -48,7 +58,10 @@ class NotesService {
     }
   }
 
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCurrentUser = true,
+  }) async {
     DatabaseUser user;
     try {
       user = await getUser(email: email);
@@ -58,6 +71,8 @@ class NotesService {
       // catched excpetions and throws it to the caller
       rethrow;
     }
+
+    if (setAsCurrentUser) _user = user;
 
     return user;
   }

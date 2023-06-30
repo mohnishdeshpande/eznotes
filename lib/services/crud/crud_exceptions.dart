@@ -13,3 +13,5 @@ class UserNotFound implements Exception {}
 class NoteNotFound implements Exception {}
 
 class CouldNotUpdateNote implements Exception {}
+
+class UserMustBeSetBeforeRead implements Exception {}
