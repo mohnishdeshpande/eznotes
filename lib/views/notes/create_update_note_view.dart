@@ -36,7 +36,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     }
     // force unwrap the current user, it is guaranteed to have user at this view
     final currentUser = AuthService.firebase().currentUser!;
-    final email = currentUser.email!;
+    final email = currentUser.email;
     final owner = await _notesService.getUser(email: email);
     // return the created note from notes service
     final newNote = await _notesService.createNote(owner: owner);
