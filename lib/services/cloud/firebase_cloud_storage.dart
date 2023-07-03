@@ -12,11 +12,18 @@ class FirebaseCloudStorage {
   // the 'stream' kind equivalent of firestore, acts like a CRUD layer
   final notes = FirebaseFirestore.instance.collection('notes');
 
-  Future<void> createNewNote({required userId}) async {
-    await notes.add({
+  Future<CloudNote> createNewNote({required userId}) async {
+    // document reference of the newly created note
+    final doc = await notes.add({
       userIdFieldName: userId,
       textFieldName: '',
     });
+
+    // get() function actually grabs the note
+    final note = await doc.get();
+
+    // return the cloud note
+    return CloudNote(docId: note.id, userId: userId, text: '');
   }
 
   Future<Iterable<CloudNote>> getNotes({required String userId}) async {
@@ -28,15 +35,7 @@ class FirebaseCloudStorage {
           )
           .get()
           .then(
-            (value) => value.docs.map(
-              (doc) {
-                return CloudNote(
-                  docId: doc.id,
-                  userId: doc.data()[userIdFieldName] as String,
-                  text: doc.data()[textFieldName] as String,
-                );
-              },
-            ),
+            (value) => value.docs.map((doc) => CloudNote.fromSnapshot(doc)),
           );
     } catch (e) {
       throw CouldNotReadException();
