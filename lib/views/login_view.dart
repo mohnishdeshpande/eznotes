@@ -52,42 +52,58 @@ class _LoginViewState extends State<LoginView> {
           title: const Text('Login'),
           backgroundColor: Colors.blue,
         ),
-        body: Column(
-          children: [
-            TextField(
-              controller: _email,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                hintText: 'Email',
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Enter your credentials to login.'),
+              TextField(
+                controller: _email,
+                enableSuggestions: false,
+                autocorrect: false,
+                autofocus: true,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                ),
               ),
-            ),
-            TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Password',
+              TextField(
+                controller: _password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  hintText: 'Password',
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<AuthBloc>().add(AuthEventLogIn(
-                      _email.text,
-                      _password.text,
-                    ));
-              },
-              child: const Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<AuthBloc>().add(const AuthEventShouldRegister());
-              },
-              child: const Text('Register here'),
-            ),
-          ],
+              Center(
+                child: Column(children: [
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(AuthEventLogIn(
+                            _email.text,
+                            _password.text,
+                          ));
+                    },
+                    child: const Text('Login'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(const AuthEventForgotPassword());
+                    },
+                    child: const Text('Forgot Password'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(const AuthEventShouldRegister());
+                    },
+                    child: const Text('Register here'),
+                  ),
+                ]),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -118,4 +118,10 @@ class MockAuthProvider implements AuthProvider {
     if (_user == null) throw UserNotFoundAuthException();
     _user = const AuthUser(id: 'id', emailVerified: true, email: 'mrd@xyz.com');
   }
+
+  @override
+  Future<void> sendPasswordReset({required String email}) {
+    // TODO: implement sendPasswordReset
+    throw UnimplementedError();
+  }
 }
