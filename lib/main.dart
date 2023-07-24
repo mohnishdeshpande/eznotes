@@ -16,12 +16,17 @@ import 'package:mynotes/views/verify_email_view.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  Color themeColor = Colors.blue[700]!;
+
   runApp(MaterialApp(
     title: 'My Notes',
     theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+      colorScheme: ColorScheme.fromSeed(seedColor: themeColor),
       useMaterial3: true,
       primarySwatch: Colors.blue,
+      appBarTheme: AppBarTheme(
+        color: themeColor,
+      ),
     ),
     home: BlocProvider(
       // creating the bloc instance

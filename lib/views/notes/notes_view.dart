@@ -36,7 +36,6 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Notes'),
-        backgroundColor: Colors.blue,
         // define the 3 dot menu
         actions: [
           IconButton(

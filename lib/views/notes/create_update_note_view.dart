@@ -109,7 +109,6 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
             icon: const Icon(Icons.share),
           ),
         ],
-        backgroundColor: Colors.blue,
       ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
