@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.mynotes</string>
+	<string>com.mohnish.mynotes</string>
 	<key>PROJECT_ID</key>
 	<string>mynotes-mohnish</string>
 	<key>STORAGE_BUCKET</key>

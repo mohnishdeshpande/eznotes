@@ -53,58 +53,60 @@ class _LoginViewState extends State<LoginView> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Enter your credentials to login.'),
-              const Padding(padding: EdgeInsets.all(16.0)),
-              TextField(
-                controller: _email,
-                enableSuggestions: false,
-                autocorrect: false,
-                autofocus: true,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  helperText: '',
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Enter your credentials to login.'),
+                const Padding(padding: EdgeInsets.all(16.0)),
+                TextField(
+                  controller: _email,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  autofocus: true,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    helperText: '',
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  helperText: '',
+                TextField(
+                  controller: _password,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    helperText: '',
+                  ),
                 ),
-              ),
-              Center(
-                child: Column(children: [
-                  TextButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(AuthEventLogIn(
-                            _email.text,
-                            _password.text,
-                          ));
-                    },
-                    child: const Text('Login'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(const AuthEventForgotPassword());
-                    },
-                    child: const Text('Forgot Password'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(const AuthEventShouldRegister());
-                    },
-                    child: const Text('Register here'),
-                  ),
-                ]),
-              )
-            ],
+                Center(
+                  child: Column(children: [
+                    TextButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(AuthEventLogIn(
+                              _email.text,
+                              _password.text,
+                            ));
+                      },
+                      child: const Text('Login'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(const AuthEventForgotPassword());
+                      },
+                      child: const Text('Forgot Password'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(const AuthEventShouldRegister());
+                      },
+                      child: const Text('Register here'),
+                    ),
+                  ]),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -50,34 +50,36 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16),
-          child: Column(children: [
-            const Text('Enter email to send password reset link'),
-            const Padding(padding: EdgeInsets.all(16.0)),
-            TextField(
-              controller: _textController,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                hintText: 'Email',
+          child: SingleChildScrollView(
+            child: Column(children: [
+              const Text('Enter email to send password reset link'),
+              const Padding(padding: EdgeInsets.all(16.0)),
+              TextField(
+                controller: _textController,
+                enableSuggestions: false,
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                final email = _textController.text;
-                context.read<AuthBloc>().add(AuthEventForgotPassword(
-                      email: email,
-                    ));
-              },
-              child: const Text('Send reset link'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<AuthBloc>().add(const AuthEventLogOut());
-              },
-              child: const Text('Back to Login'),
-            ),
-          ]),
+              TextButton(
+                onPressed: () {
+                  final email = _textController.text;
+                  context.read<AuthBloc>().add(AuthEventForgotPassword(
+                        email: email,
+                      ));
+                },
+                child: const Text('Send reset link'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(const AuthEventLogOut());
+                },
+                child: const Text('Back to Login'),
+              ),
+            ]),
+          ),
         ),
       ),
     );
