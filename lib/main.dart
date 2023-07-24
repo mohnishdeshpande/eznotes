@@ -19,26 +19,30 @@ void main() {
 
   Color themeColor = Colors.blue[700]!;
 
-  runApp(MaterialApp(
-    title: 'My Notes',
-    theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: themeColor),
-      useMaterial3: true,
-      primarySwatch: Colors.blue,
-      inputDecorationTheme: MyTheme.myInputDecoration(themeColor),
-      appBarTheme: AppBarTheme(
-        color: themeColor,
+  runApp(
+    MaterialApp(
+      title: 'My Notes',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: themeColor),
+        useMaterial3: true,
+        primarySwatch: Colors.blue,
+        inputDecorationTheme: MyTheme.myInputDecoration(themeColor),
+        elevatedButtonTheme: MyTheme.myElevatedButtonTheme(),
+        appBarTheme: AppBarTheme(
+          color: themeColor,
+        ),
       ),
+      home: BlocProvider(
+        // creating the bloc instance
+        create: (context) => AuthBloc(FirebaseAuthProvider()),
+        child: const HomePage(),
+      ),
+      routes: {
+        createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
+        // forgotPasswordRoute: (context) => const ForgotPasswordView(),
+      },
     ),
-    home: BlocProvider(
-      // creating the bloc instance
-      create: (context) => AuthBloc(FirebaseAuthProvider()),
-      child: const HomePage(),
-    ),
-    routes: {
-      createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
-    },
-  ));
+  );
 }
 
 class HomePage extends StatelessWidget {

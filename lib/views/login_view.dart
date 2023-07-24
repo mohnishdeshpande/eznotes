@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
@@ -77,33 +78,36 @@ class _LoginViewState extends State<LoginView> {
                   autocorrect: false,
                   decoration: const InputDecoration(
                     labelText: 'Password',
-                    helperText: '',
                   ),
                 ),
-                Center(
-                  child: Column(children: [
-                    TextButton(
-                      onPressed: () {
-                        context.read<AuthBloc>().add(AuthEventLogIn(
-                              _email.text,
-                              _password.text,
-                            ));
-                      },
-                      child: const Text('Login'),
-                    ),
+                Row(
+                  children: [
                     TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(const AuthEventForgotPassword());
+                        // Navigator.of(context).pushNamed(forgotPasswordRoute);
                       },
                       child: const Text('Forgot Password'),
                     ),
+                    const Spacer(),
                     TextButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(const AuthEventShouldRegister());
                       },
                       child: const Text('Register here'),
                     ),
-                  ]),
+                  ],
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(AuthEventLogIn(
+                            _email.text,
+                            _password.text,
+                          ));
+                    },
+                    child: const Text('Login'),
+                  ),
                 )
               ],
             ),

@@ -69,7 +69,8 @@ class _RegisterViewState extends State<RegisterView> {
                   autofocus: true,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    hintText: 'Email',
+                    labelText: 'Email',
+                    helperText: '',
                   ),
                 ),
                 // password text field
@@ -79,13 +80,25 @@ class _RegisterViewState extends State<RegisterView> {
                   enableSuggestions: false,
                   autocorrect: false,
                   decoration: const InputDecoration(
-                    hintText: 'Password',
+                    labelText: 'Password',
                   ),
+                ),
+                Row(
+                  children: [
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        // feed the log out event in order to send user to the login
+                        context.read<AuthBloc>().add(const AuthEventLogOut());
+                      },
+                      child: const Text('Already Registered? Login'),
+                    ),
+                  ],
                 ),
                 // register button
                 Center(
                   child: Column(children: [
-                    TextButton(
+                    ElevatedButton(
                       child: const Text('Register'),
                       onPressed: () async {
                         //extracting text from the controllers
@@ -93,13 +106,6 @@ class _RegisterViewState extends State<RegisterView> {
                         final password = _password.text;
                         context.read<AuthBloc>().add(AuthEventRegister(email, password));
                       },
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // feed the log out event in order to send user to the login
-                        context.read<AuthBloc>().add(const AuthEventLogOut());
-                      },
-                      child: const Text('Already Registered? Login here'),
                     ),
                   ]),
                 )
