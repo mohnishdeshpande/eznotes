@@ -57,6 +57,7 @@ class _LoginViewState extends State<LoginView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('Enter your credentials to login.'),
+              const Padding(padding: EdgeInsets.all(16.0)),
               TextField(
                 controller: _email,
                 enableSuggestions: false,
@@ -64,7 +65,8 @@ class _LoginViewState extends State<LoginView> {
                 autofocus: true,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
-                  hintText: 'Email',
+                  labelText: 'Email',
+                  helperText: '',
                 ),
               ),
               TextField(
@@ -73,7 +75,8 @@ class _LoginViewState extends State<LoginView> {
                 enableSuggestions: false,
                 autocorrect: false,
                 decoration: const InputDecoration(
-                  hintText: 'Password',
+                  labelText: 'Password',
+                  helperText: '',
                 ),
               ),
               Center(

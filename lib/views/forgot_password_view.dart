@@ -52,6 +52,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           padding: const EdgeInsets.all(16),
           child: Column(children: [
             const Text('Enter email to send password reset link'),
+            const Padding(padding: EdgeInsets.all(16.0)),
             TextField(
               controller: _textController,
               enableSuggestions: false,

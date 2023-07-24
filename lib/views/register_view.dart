@@ -59,6 +59,7 @@ class _RegisterViewState extends State<RegisterView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('Enter your email address and a password'),
+              const Padding(padding: EdgeInsets.all(16.0)),
               // email text field
               TextField(
                 controller: _email,
