@@ -7,6 +7,11 @@ import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseAuthException;
 
 class FirebaseAuthProvider implements AuthProvider {
+  // Singleton logic
+  static final FirebaseAuthProvider _shared = FirebaseAuthProvider._internal();
+  factory FirebaseAuthProvider() => _shared;
+  FirebaseAuthProvider._internal();
+
   @override
   Future<AuthUser> createUser({
     required String email,

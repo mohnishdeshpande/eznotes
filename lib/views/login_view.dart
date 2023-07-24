@@ -64,7 +64,7 @@ class _LoginViewState extends State<LoginView> {
                   controller: _email,
                   enableSuggestions: false,
                   autocorrect: false,
-                  autofocus: true,
+                  // autofocus: true,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: 'Email',
@@ -84,9 +84,8 @@ class _LoginViewState extends State<LoginView> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        // context.read<AuthBloc>().add(const AuthEventForgotPassword());
-                        // Navigator.of(context).pushNamed(forgotPasswordRoute);
-                        Navigator.pushNamed(context, forgotPasswordRoute);
+                        // navigate to forgot password view
+                        Navigator.of(context).pushNamed(forgotPasswordRoute);
                       },
                       child: const Text('Forgot Password'),
                     ),

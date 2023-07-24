@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
-import 'package:mynotes/services/auth/bloc/auth_event.dart';
-import 'package:mynotes/services/auth/bloc/auth_state.dart';
+import 'package:mynotes/services/auth/auth_provider.dart';
+import 'package:mynotes/services/auth/firebase_auth_provider.dart';
 import 'package:mynotes/utils/dialogs/error_dialog.dart';
 import 'package:mynotes/utils/dialogs/password_reset_email_sent_dialog.dart';
 
@@ -15,6 +13,7 @@ class ForgotPasswordView extends StatefulWidget {
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   late final TextEditingController _textController;
+  AuthProvider provider = FirebaseAuthProvider();
 
   @override
   void initState() {
@@ -28,76 +27,98 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     super.dispose();
   }
 
+  Future<bool> sendResetLink(String email) async {
+    bool res = true;
+    try {
+      await provider.sendPasswordReset(email: email);
+    } on Exception catch (_) {
+      res = false;
+    }
+
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) async {
-        if (state is AuthStateForgotPassword) {
-          if (state.emailSent) {
-            _textController.clear();
-            await showPasswordResetEmailSentDialog(context);
-          }
-          if (state.exception != null) {
-            if (context.mounted) {
-              await showErrorDialog(context, 'Reset request failed.');
-            }
-          }
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              context.read<AuthBloc>().add(const AuthEventLogOut());
-            },
-          ),
-          title: const Text('Forgot Password'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Enter email to send password reset link'),
-                const Padding(padding: EdgeInsets.all(16.0)),
-                TextField(
-                  controller: _textController,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    helperText: '',
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Forgot Password'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Enter email to send password reset link'),
+              const Padding(padding: EdgeInsets.all(16.0)),
+              TextField(
+                controller: _textController,
+                enableSuggestions: false,
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  // helperText: '',
                 ),
-                Center(
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          final email = _textController.text;
-                          _textController.clear();
-                          context.read<AuthBloc>().add(AuthEventForgotPassword(
-                                email: email,
-                              ));
-                        },
-                        child: const Text('Send reset link'),
-                      ),
-                      // ElevatedButton(
-                      //   onPressed: () {
+              ),
+              Row(
+                children: [
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Back to Login'),
+                  )
+                ],
+              ),
+              Center(
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        final email = _textController.text;
+                        _textController.clear();
+                        // reset process
+                        bool linkSent = await sendResetLink(email);
+                        if (linkSent && context.mounted) {
+                          await showPasswordResetEmailSentDialog(context);
+                        } else {
+                          await showErrorDialog(context, 'Unable to process');
+                        }
+                      },
+                      child: const Text('Send reset link'),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
 
-                      //   },
-                      //   child: const Text('Back to Login'),
-                      // ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    //   },
+                    //   child: const Text('Back to Login'),
+                    // ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
     );
+    // return BlocListener<AuthBloc, AuthState>(
+    //   listener: (context, state) async {
+    //     if (state is AuthStateForgotPassword) {
+    //       if (state.emailSent) {
+    //         _textController.clear();
+    //         await showPasswordResetEmailSentDialog(context);
+    //       }
+    //       if (state.exception != null) {
+    //         if (context.mounted) {
+    //           await showErrorDialog(context, 'Reset request failed.');
+    //         }
+    //       }
+    //     }
+    //   },
+    //   child: ,
+    // );
   }
 }

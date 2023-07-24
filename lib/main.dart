@@ -39,7 +39,7 @@ void main() {
       ),
       routes: {
         createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
-        // forgotPasswordRoute: (context) => const ForgotPasswordView(),
+        forgotPasswordRoute: (context) => const ForgotPasswordView(),
       },
     ),
   );
@@ -75,9 +75,11 @@ class HomePage extends StatelessWidget {
           return const LoginView();
         } else if (state is AuthStateRegistering) {
           return const RegisterView();
-        } else if (state is AuthStateForgotPassword) {
-          return const ForgotPasswordView();
-        } else {
+        }
+        //  else if (state is AuthStateForgotPassword) {
+        //   return const ForgotPasswordView();
+        // }
+        else {
           return const Scaffold(
             body: CircularProgressIndicator(),
           );
