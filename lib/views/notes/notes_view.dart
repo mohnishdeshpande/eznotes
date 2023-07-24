@@ -45,30 +45,16 @@ class _NotesViewState extends State<NotesView> {
             },
             icon: const Icon(Icons.add),
           ),
-          // action button, that takes MenuAction as input
-          PopupMenuButton<MenuAction>(
-            // responsible for displaying the all actions to the user
-            itemBuilder: (context) {
-              // list of all coded actions
-              return const [
-                PopupMenuItem<MenuAction>(
-                  // parameter value
-                  value: MenuAction.logout,
-                  // user displayed text
-                  child: Text('Log out'),
-                )
-              ];
-            },
-            onSelected: (value) async {
-              switch (value) {
-                case MenuAction.logout:
-                  final shouldLogout = await showLogOutDialog(context);
-                  if (shouldLogout && context.mounted) {
-                    context.read<AuthBloc>().add(const AuthEventLogOut());
-                  }
+          IconButton(
+            onPressed: () async {
+              final shouldLogout = await showLogOutDialog(context);
+              if (shouldLogout && context.mounted) {
+                context.read<AuthBloc>().add(const AuthEventLogOut());
               }
             },
-          )
+            icon: const Icon(Icons.logout),
+          ),
+          // action button, that takes MenuAction as input
         ],
       ),
       body: StreamBuilder(

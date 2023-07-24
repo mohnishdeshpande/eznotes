@@ -46,6 +46,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(const AuthEventLogOut());
+            },
+          ),
           title: const Text('Forgot Password'),
         ),
         body: Padding(
@@ -72,18 +77,19 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                       ElevatedButton(
                         onPressed: () {
                           final email = _textController.text;
+                          _textController.clear();
                           context.read<AuthBloc>().add(AuthEventForgotPassword(
                                 email: email,
                               ));
                         },
                         child: const Text('Send reset link'),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(const AuthEventLogOut());
-                        },
-                        child: const Text('Back to Login'),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+
+                      //   },
+                      //   child: const Text('Back to Login'),
+                      // ),
                     ],
                   ),
                 )
