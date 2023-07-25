@@ -35,15 +35,7 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Notes'),
-        // define the 3 dot menu
         actions: [
-          IconButton(
-            onPressed: () {
-              // go to new note view
-              Navigator.of(context).pushNamed(createOrUpdateNoteRoute);
-            },
-            icon: const Icon(Icons.add),
-          ),
           IconButton(
             onPressed: () async {
               final shouldLogout = await showLogOutDialog(context);
@@ -72,8 +64,8 @@ class _NotesViewState extends State<NotesView> {
                   },
                   onTap: (note) {
                     /*passing note as argument so that
-                              createOrUpdate routine understands its an
-                              update operation*/
+															createOrUpdate routine understands its an
+															update operation*/
                     Navigator.of(context).pushNamed(
                       createOrUpdateNoteRoute,
                       arguments: note,
@@ -81,12 +73,18 @@ class _NotesViewState extends State<NotesView> {
                   },
                 );
               } else {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
             default:
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(createOrUpdateNoteRoute);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

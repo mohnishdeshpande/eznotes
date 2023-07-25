@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
-import 'package:mynotes/themes/theme.dart';
 import 'package:mynotes/utils/generics/get_argument.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
@@ -61,7 +60,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     final note = _note;
     final heading = _headingController.text;
     final text = _textController.text;
-    if (text.isNotEmpty && note != null) {
+    if ((text.isNotEmpty || heading.isNotEmpty) && note != null) {
       await _notesService.updateNote(docId: note.docId, heading: heading, text: text);
     }
   }
@@ -120,6 +119,12 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
             },
             icon: const Icon(Icons.share),
           ),
+          IconButton(
+            onPressed: () {
+              _saveNoteIfNotEmpty();
+            },
+            icon: const Icon(Icons.save),
+          ),
         ],
       ),
       body: FutureBuilder(
@@ -136,7 +141,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
                       controller: _headingController,
                       maxLines: 1,
                       decoration: InputDecoration(
-                        hintText: 'Note title',
+                        hintText: 'Title',
                         filled: true,
                         fillColor: Colors.blue[100],
                         // focusedBorder: MyTheme.buildBorder(Colors.grey[600]!, isNote: true),
@@ -161,7 +166,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
                 ),
               );
             default:
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
           }
         },
       ),
