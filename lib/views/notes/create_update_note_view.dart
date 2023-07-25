@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
+import 'package:mynotes/themes/theme.dart';
 import 'package:mynotes/utils/generics/get_argument.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
@@ -19,6 +20,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   CloudNote? _note;
   late final FirebaseCloudStorage _notesService;
   late final TextEditingController _textController;
+  late final TextEditingController _headingController;
 
   // new note routine
   Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
@@ -28,6 +30,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     if (widgetNote != null) {
       _note = widgetNote;
       _textController.text = widgetNote.text;
+      _headingController.text = widgetNote.heading;
       return widgetNote;
     }
 
@@ -48,7 +51,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   void _deleteNoteIfEmpty() async {
     // creating a temp 'note' since '_note' is nullable.
     final note = _note;
-    if (_textController.text.isEmpty && note != null) {
+    if (_textController.text.isEmpty && _headingController.text.isEmpty && note != null) {
       await _notesService.deleteNote(docId: note.docId);
     }
   }
@@ -56,9 +59,10 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   // saving note data if not empty
   void _saveNoteIfNotEmpty() async {
     final note = _note;
+    final heading = _headingController.text;
     final text = _textController.text;
     if (text.isNotEmpty && note != null) {
-      await _notesService.updateNote(docId: note.docId, text: text);
+      await _notesService.updateNote(docId: note.docId, heading: heading, text: text);
     }
   }
 
@@ -68,7 +72,12 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       return;
     }
     final text = _textController.text;
-    await _notesService.updateNote(docId: note.docId, text: text);
+    final heading = _headingController.text;
+    await _notesService.updateNote(
+      docId: note.docId,
+      heading: heading,
+      text: text,
+    );
   }
 
   void _setupTextEditingController() {
@@ -80,6 +89,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   void initState() {
     _notesService = FirebaseCloudStorage();
     _textController = TextEditingController();
+    _headingController = TextEditingController();
     super.initState();
   }
 
@@ -88,6 +98,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     _deleteNoteIfEmpty();
     _saveNoteIfNotEmpty();
     _textController.dispose();
+    _headingController.dispose();
     super.dispose();
   }
 
@@ -95,15 +106,16 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Note'),
+        title: const Text('You Awesome Note'),
         actions: [
           IconButton(
             onPressed: () async {
+              final heading = _headingController.text;
               final text = _textController.text;
               if (_note == null || text.isEmpty) {
                 await showCannotShareEmptyNoteDialog(context);
               } else {
-                Share.share(text);
+                Share.share('Tite: $heading\nContent: $text');
               }
             },
             icon: const Icon(Icons.share),
@@ -118,13 +130,34 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
               _setupTextEditingController();
               return Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: _textController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    hintText: 'Write your note here...',
-                  ),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _headingController,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        hintText: 'Note title',
+                        filled: true,
+                        fillColor: Colors.blue[100],
+                        // focusedBorder: MyTheme.buildBorder(Colors.grey[600]!, isNote: true),
+                        // enabledBorder: MyTheme.buildBorder(Colors.blue[200]!, isNote: true),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _textController,
+                      minLines: 8,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        hintText: 'Write your note here...',
+                        filled: true,
+                        fillColor: Colors.blue[100],
+                        // focusedBorder: MyTheme.buildBorder(Colors.grey[600]!, isNote: true),
+                        // enabledBorder: MyTheme.buildBorder(Colors.blue[200]!, isNote: true),
+                      ),
+                    ),
+                  ],
                 ),
               );
             default:

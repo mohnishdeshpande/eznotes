@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const borderRadius = 16.0;
+const borderRadius = 24.0;
 const borderWidth = 2.0;
 const padding = 16.0;
 
@@ -19,14 +19,14 @@ class MyTheme {
     );
   }
 
-  static OutlineInputBorder buildBorder(Color color) {
+  static OutlineInputBorder buildBorder(Color color, {bool isNote = false}) {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(
         Radius.circular(borderRadius),
       ),
       borderSide: BorderSide(
         color: color,
-        width: borderWidth,
+        width: (isNote) ? borderWidth * 2 : borderWidth,
       ),
     );
   }

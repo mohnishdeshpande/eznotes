@@ -16,6 +16,7 @@ class FirebaseCloudStorage {
     // document reference of the newly created note
     final doc = await notes.add({
       userIdFieldName: userId,
+      headingFieldName: '',
       textFieldName: '',
     });
 
@@ -23,7 +24,7 @@ class FirebaseCloudStorage {
     final note = await doc.get();
 
     // return the cloud note
-    return CloudNote(docId: note.id, userId: userId, text: '');
+    return CloudNote(docId: note.id, userId: userId, heading: '', text: '');
   }
 
   Stream<Iterable<CloudNote>> allNotes({required String userId}) {
@@ -33,9 +34,9 @@ class FirebaseCloudStorage {
         .map((event) => event.docs.map((doc) => CloudNote.fromSnapshot(doc)));
   }
 
-  Future<void> updateNote({required docId, required text}) async {
+  Future<void> updateNote({required docId, required heading, required text}) async {
     try {
-      await notes.doc(docId).update({textFieldName: text});
+      await notes.doc(docId).update({headingFieldName: heading, textFieldName: text});
     } catch (e) {
       throw CouldNotUpdateException();
     }
