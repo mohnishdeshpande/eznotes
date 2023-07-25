@@ -4,6 +4,7 @@ import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
+import 'package:mynotes/themes/theme.dart';
 import 'package:mynotes/utils/dialogs/error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
@@ -59,8 +60,11 @@ class _RegisterViewState extends State<RegisterView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Enter your email address and a password'),
-                const Padding(padding: EdgeInsets.all(16.0)),
+                Text(
+                  'Enter your email address and a password',
+                  style: MyTheme.myTextStyle(),
+                ),
+                const SizedBox(height: 20),
                 // email text field
                 TextField(
                   controller: _email,

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
+import 'package:mynotes/themes/theme.dart';
 import 'package:mynotes/utils/dialogs/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
@@ -44,7 +45,7 @@ class _LoginViewState extends State<LoginView> {
           } else if (state.exception is WrongPasswordAuthException) {
             await showErrorDialog(context, 'Wrong credentials');
           } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, 'Authentication error');
+            await showErrorDialog(context, 'Authentication error. Try again.');
           }
         }
       },
@@ -58,8 +59,11 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Enter your credentials to login.'),
-                const Padding(padding: EdgeInsets.all(16.0)),
+                Text(
+                  'Enter your credentials to login.',
+                  style: MyTheme.myTextStyle(),
+                ),
+                const SizedBox(height: 20),
                 TextField(
                   controller: _email,
                   enableSuggestions: false,
@@ -68,9 +72,9 @@ class _LoginViewState extends State<LoginView> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: 'Email',
-                    helperText: '',
                   ),
                 ),
+                const SizedBox(height: 20),
                 TextField(
                   controller: _password,
                   obscureText: true,

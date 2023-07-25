@@ -38,4 +38,12 @@ class MyTheme {
       ),
     );
   }
+
+  static TextStyle myTextStyle() {
+    return TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 16,
+      color: Colors.grey[600],
+    );
+  }
 }

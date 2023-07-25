@@ -29,7 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthStateLoggedOut(
           exception: null,
           isLoading: true,
-          loadingText: 'Please wait while you\'re being logged in',
+          loadingText: 'Loggin in...',
         ));
         final email = event.email;
         final password = event.password;

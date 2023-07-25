@@ -30,6 +30,11 @@ void main() {
         elevatedButtonTheme: MyTheme.myElevatedButtonTheme(),
         appBarTheme: AppBarTheme(
           color: themeColor,
+          titleTextStyle: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 22,
+            color: Colors.black,
+          ),
         ),
       ),
       home: BlocProvider(

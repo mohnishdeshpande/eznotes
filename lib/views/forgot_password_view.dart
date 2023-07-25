@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_provider.dart';
 import 'package:mynotes/services/auth/firebase_auth_provider.dart';
+import 'package:mynotes/themes/theme.dart';
 import 'package:mynotes/utils/dialogs/error_dialog.dart';
 import 'package:mynotes/utils/dialogs/password_reset_email_sent_dialog.dart';
 
@@ -50,8 +51,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Enter email to send password reset link'),
-              const Padding(padding: EdgeInsets.all(16.0)),
+              Text(
+                'Enter email to send password reset link',
+                style: MyTheme.myTextStyle(),
+              ),
+              const SizedBox(height: 20),
               TextField(
                 controller: _textController,
                 enableSuggestions: false,
