@@ -105,7 +105,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('You Awesome Note'),
+        title: const Text('Edit Note'),
         actions: [
           IconButton(
             onPressed: () async {
