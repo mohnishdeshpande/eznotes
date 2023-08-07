@@ -18,17 +18,15 @@ class NotesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: notes.length,
-      itemBuilder: (context, index) {
-        final note = notes.elementAt(index);
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Card(
+    return ReorderableListView(
+      children: [
+        for (final note in notes)
+          Card(
             color: Colors.blue[100],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0),
             ),
+            key: ValueKey(note),
             child: ListTile(
               onTap: () {
                 onTap(note);
@@ -50,7 +48,11 @@ class NotesListView extends StatelessWidget {
               ),
             ),
           ),
-        );
+      ],
+      onReorder: (int oldIndex, int newIndex) {
+        if (oldIndex < newIndex) newIndex--;
+        final curTile = notes.removeAt(oldIndex);
+        notes.insert(newIndex, curTile);
       },
     );
   }
