@@ -135,34 +135,36 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
               _setupTextEditingController();
               return Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _headingController,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        hintText: 'Title',
-                        filled: true,
-                        fillColor: Colors.blue[100],
-                        // focusedBorder: MyTheme.buildBorder(Colors.grey[600]!, isNote: true),
-                        // enabledBorder: MyTheme.buildBorder(Colors.blue[200]!, isNote: true),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _headingController,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          hintText: 'Title',
+                          filled: true,
+                          fillColor: Colors.blue[100],
+                          // focusedBorder: MyTheme.buildBorder(Colors.grey[600]!, isNote: true),
+                          // enabledBorder: MyTheme.buildBorder(Colors.blue[200]!, isNote: true),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _textController,
-                      minLines: 8,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        hintText: 'Write your note here...',
-                        filled: true,
-                        fillColor: Colors.blue[100],
-                        // focusedBorder: MyTheme.buildBorder(Colors.grey[600]!, isNote: true),
-                        // enabledBorder: MyTheme.buildBorder(Colors.blue[200]!, isNote: true),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: _textController,
+                        minLines: 8,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          hintText: 'Write your note here...',
+                          filled: true,
+                          fillColor: Colors.blue[100],
+                          // focusedBorder: MyTheme.buildBorder(Colors.grey[600]!, isNote: true),
+                          // enabledBorder: MyTheme.buildBorder(Colors.blue[200]!, isNote: true),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             default:

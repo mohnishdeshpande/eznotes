@@ -58,7 +58,7 @@ class _NotesViewState extends State<NotesView> {
               if (snapshot.hasData) {
                 final notes = snapshot.data as Iterable<CloudNote>;
                 return NotesListView(
-                  notes: notes,
+                  notes: notes.toList(),
                   onDelete: (note) async {
                     await _notesService.deleteNote(docId: note.docId);
                   },
