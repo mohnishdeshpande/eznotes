@@ -89,7 +89,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         if (linkSent && context.mounted) {
                           await showPasswordResetEmailSentDialog(context);
                         } else {
-                          await showErrorDialog(context, 'Unable to process');
+                          if (context.mounted) {
+                            await showErrorDialog(context, 'Unable to process');
+                          }
                         }
                       },
                       child: const Text('Send reset link'),
